@@ -1,16 +1,17 @@
 #include "raylib.h"
 #include "string"
 #include "vector"
-#include "format"
 #include "iostream"
+#include "sstream"
 
 int main()
 {
     InitWindow(800, 450, "Texor");
 
-    std::vector<std::string> content;
-    content.emplace_back("");
+    std::vector<std::string> content = {""};
     int currentLine = 0;
+    int currentPos = 0;
+    const int lineHeight = 20;
 
 
 
@@ -24,7 +25,14 @@ int main()
         {
             DrawText(content[i].c_str(), 0, 20*i, 20, LIGHTGRAY);
         }
-        DrawText(std::format("Currently holding {} / {} lines", content.size(), content.capacity()).c_str(), 50, 20*i, 20, RED);
+
+        int bottomLine = GetScreenHeight() - 20;
+        DrawLine(0, bottomLine, GetScreenWidth(), bottomLine, LIGHTGRAY);
+
+        std::stringstream ss;
+        ss << "Currently holding "<<  content.size() << " / " << content.capacity() << " lines";
+
+        DrawText(ss.str().c_str(), 50, bottomLine, 20, RED);
 
         EndDrawing();
 
@@ -32,6 +40,30 @@ int main()
         {
             content.emplace_back("");
             currentLine++;
+        }
+
+        if(IsKeyReleased(KEY_BACKSPACE))
+        {
+            if(!content[currentLine].empty())
+            {
+                content[currentLine].pop_back();
+            }
+        }
+
+        if(IsKeyReleased(KEY_UP))
+        {
+            if(currentLine != 0)
+            {
+                currentLine -= 1;
+            }
+        }
+
+        if(IsKeyReleased(KEY_DOWN))
+        {
+            if(currentLine != (content.size() - 1))
+            {
+                currentLine += 1;
+            }
         }
 
         bool running = true;
