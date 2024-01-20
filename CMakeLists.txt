@@ -4,8 +4,9 @@ project(Texor)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Texor src/main.cpp
-        src/ui/TopBar.cpp
-        src/ui/TopBar.h
+        src/ui/raygui.h
+        src/ui/MenuBar.cpp
+        src/ui/MenuBar.h
         src/ui/StatusBar.cpp
         src/ui/StatusBar.h
         src/ui/Editor.cpp

@@ -7,7 +7,9 @@
 
 Editor::Editor()
 {
-	topBar = TopBar();
+	menuBar = MenuBar();
+	menuBar.onNewFileClicked = [this]
+	{ newFile(); };
 	statusBar = StatusBar();
 }
 
@@ -15,15 +17,17 @@ void Editor::draw()
 {
 	int height = GetRenderHeight();
 	int width = GetRenderWidth();
-	BeginScissorMode(0, 0, width, topBar.height);
+	//BeginScissorMode(0, 0, width, menuBar.height);
 	{
-		topBar.draw();
+		menuBar.draw();
 	}
-	EndScissorMode();
+	//EndScissorMode();
 
-	BeginScissorMode(0, topBar.height, width, height - (topBar.height + statusBar.height));
+	BeginScissorMode(0, menuBar.height, width, height - (menuBar.height + statusBar.height));
 	{
-		DrawLine(0, topBar.height, GetRenderWidth(), topBar.height, RED);
+		DrawLine(0, menuBar.height, GetRenderWidth(), menuBar.height, RED);
+
+		drawEditorTabs({ 0, (float)menuBar.height + 1, (float)GetRenderWidth(), 20 });
 
 		DrawLine(0, height - (statusBar.height + 1), GetRenderWidth(), height - (statusBar.height + 1), BLUE);
 	}
@@ -35,8 +39,17 @@ void Editor::draw()
 	}
 	EndScissorMode();
 }
+
+void Editor::drawEditorTabs(Rectangle rec)
+{
+	if (files.empty() || currentFile == nullptr) return;
+
+	DrawRectangleRec(rec, YELLOW);
+}
+
 void Editor::handleControls()
 {
+
 	return;
 
 	if (IsKeyReleased(KEY_ENTER))
@@ -82,4 +95,11 @@ void Editor::handleControls()
 			currentFile->data[currentLine] += char(val);
 		}
 	}
+}
+void Editor::newFile()
+{
+	File* f = new File();
+
+	files.emplace_back(f);
+	currentFile = f;
 }

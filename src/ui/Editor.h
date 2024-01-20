@@ -7,8 +7,9 @@
 
 #include "../core/File.h"
 #include <vector>
-#include "TopBar.h"
+#include "MenuBar.h"
 #include "StatusBar.h"
+#include "raylib.h"
 
 class Editor
 {
@@ -18,13 +19,16 @@ private:
 	int currentLine = 0;
 	int currentCol = 0;
 
-	TopBar topBar;
+	MenuBar menuBar;
 	StatusBar statusBar;
 public:
 	Editor();
 
 	void draw();
+	void drawEditorTabs(Rectangle rec);
 	void handleControls();
+
+	void newFile();
 };
 
 
