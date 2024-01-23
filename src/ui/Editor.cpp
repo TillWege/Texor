@@ -4,6 +4,7 @@
 
 #include "Editor.h"
 #include "raylib.h"
+#include "raygui.h"
 
 Editor::Editor()
 {
@@ -25,7 +26,8 @@ void Editor::draw()
 
 	BeginScissorMode(0, menuBar.height, width, height - (menuBar.height + statusBar.height));
 	{
-		DrawLine(0, menuBar.height, GetRenderWidth(), menuBar.height, RED);
+
+		DrawLine(0, menuBar.height, GetRenderWidth(), menuBar.height, Color{ 201, 201, 201, 255 });
 
 		drawEditorTabs({ 0, (float)menuBar.height + 1, (float)GetRenderWidth(), 20 });
 
@@ -44,7 +46,18 @@ void Editor::drawEditorTabs(Rectangle rec)
 {
 	if (files.empty() || currentFile == nullptr) return;
 
-	DrawRectangleRec(rec, YELLOW);
+	for (int i = 0; i < files.size(); i++)
+	{
+		Rectangle buttonRect = {
+			.x = (float)(100 * i),
+			.y = rec.y,
+			.width = 100,
+			.height = rec.height
+		};
+
+
+		GuiButton(buttonRect, TextFormat("File %d", i));
+	}
 }
 
 void Editor::handleControls()
